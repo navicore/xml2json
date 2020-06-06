@@ -1,3 +1,4 @@
+data/
 ENV*.sh
 .ensime
 .ensime_cache/

@@ -22,6 +22,8 @@ libraryDependencies ++=
   Seq(
 
     "org.rogach" %% "scallop" % "3.4.0",
+    "org.json4s" %% "json4s-xml" % "3.6.6",
+    "org.json4s" %% "json4s-native" % "3.6.6",
 
     "org.scalatest" %% "scalatest" % "3.1.2" % "test"
 
