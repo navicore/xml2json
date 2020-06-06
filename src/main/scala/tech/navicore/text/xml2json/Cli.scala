@@ -47,12 +47,12 @@ object Cli extends App {
   def transform(xmlElems: Elem,
                 elemName: String,
                 arrayNames: List[String],
-                numericNames: List[String],
-                boolNames: List[String]): JValue = {
+                numericElems: List[String],
+                boolElems: List[String]): JValue = {
     toJson(xmlElems \\ elemName) transformField {
       case (x, l) if arrayNames.contains(x) => (x, if (l.children.isEmpty) JNull else l.children.head)
-      case (x, JString(s)) if numericNames.contains(s) => (x, stringToJInt(s))
-      case (x, JString(s)) if boolNames.contains(s) => (x, stringToJBool(s))
+      case (x, JString(s)) if numericElems.contains(x) => (x, stringToJInt(s))
+      case (x, JString(s)) if boolElems.contains(x) => (x, stringToJBool(s))
     }
   }
 
@@ -87,8 +87,8 @@ object Cli extends App {
   def apply(pp: Boolean,
             elemName: String,
             arrayNames: List[String],
-            numericNames: List[String],
-            boolNames: List[String]): Unit = {
+            numericElems: List[String],
+            boolElems: List[String]): Unit = {
 
     Iterator
       .continually(scala.io.StdIn.readLine())
@@ -99,7 +99,7 @@ object Cli extends App {
 
           case Success(xmlelems) =>
             val json =
-              transform(xmlelems, elemName, arrayNames, numericNames, boolNames)
+              transform(xmlelems, elemName, arrayNames, numericElems, boolElems)
             val txnJson: Seq[String] = json \ elemName match {
               case jarray: JArray =>
                 jarray.children.map(t => compact(render(t)))
@@ -135,9 +135,9 @@ object Cli extends App {
   val pp: Boolean = conf.pretty()
   val elemName: String = conf.elemName()
   val arrayNames: List[String] = conf.arrayNames().split(',').toList
-  val numericNames: List[String] = conf.numericElems().split(',').toList
-  val boolNames: List[String] = conf.boolElems().split(',').toList
+  val numericElems: List[String] = conf.numericElems().split(',').toList
+  val boolElems: List[String] = conf.boolElems().split(',').toList
 
-  apply(pp, elemName, arrayNames, numericNames, boolNames)
+  apply(pp, elemName, arrayNames, numericElems, boolElems)
 
 }

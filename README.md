@@ -3,7 +3,7 @@ xml2json - a CLI to turn XML into JSON
 
 Works in two modes.
 
-1. Send in a single XML document via STDIN and get a single json line via STDOUT.
+1. ~~Send in a single XML document via STDIN and get a single json line via STDOUT.~~  TODO
 1. Send in a stream of XML documents - 1 whole document per line (you must strip newlines beforehand) via STDIN and get a stream of json lines (jsonl) via STDOUT.
 
 ## INSTALL
