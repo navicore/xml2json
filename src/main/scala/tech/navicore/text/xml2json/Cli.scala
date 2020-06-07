@@ -40,6 +40,16 @@ object Cli extends App {
   private def stringToJBool(string: String): JBool = {
     string.trim match {
       case "" => JBool(false)
+      case "Y" => JBool(true)
+      case "y" => JBool(true)
+      case "N" => JBool(false)
+      case "n" => JBool(false)
+      case "1" => JBool(true)
+      case "0" => JBool(false)
+      case "t" => JBool(true)
+      case "T" => JBool(true)
+      case "f" => JBool(false)
+      case "F" => JBool(false)
       case s  => JBool(s.toBoolean)
     }
   }
