@@ -1,12 +1,7 @@
 package tech.navicore.text.xml2json
 
-import org.json4s.native.JsonMethods._
-import org.json4s.Xml.toJson
 import org.json4s._
-
-import scala.util.{Failure, Success, Try}
-import scala.xml.{Elem, XML}
-
+import org.json4s.native.JsonMethods._
 import org.rogach.scallop._
 
 class CliConf(arguments: Seq[String]) extends ScallopConf(arguments) {
@@ -30,70 +25,6 @@ class CliConf(arguments: Seq[String]) extends ScallopConf(arguments) {
 
 object Cli extends App {
 
-  private def stringToJInt(string: String): JInt = {
-    string.trim match {
-      case "" => JInt(0)
-      case s  => JInt(s.toInt)
-    }
-  }
-
-  private def stringToJBool(string: String): JBool = {
-    string.trim match {
-      case "" => JBool(false)
-      case "Y" => JBool(true)
-      case "y" => JBool(true)
-      case "N" => JBool(false)
-      case "n" => JBool(false)
-      case "1" => JBool(true)
-      case "0" => JBool(false)
-      case "t" => JBool(true)
-      case "T" => JBool(true)
-      case "f" => JBool(false)
-      case "F" => JBool(false)
-      case s  => JBool(s.toBoolean)
-    }
-  }
-
-  def transform(xmlElems: Elem,
-                elemName: String,
-                arrayNames: List[String],
-                numericElems: List[String],
-                boolElems: List[String]): JValue = {
-    toJson(xmlElems \\ elemName) transformField {
-      case (x, l) if arrayNames.contains(x) => (x, if (l.children.isEmpty) JNull else l.children.head)
-      case (x, JString(s)) if numericElems.contains(x) => (x, stringToJInt(s))
-      case (x, JString(s)) if boolElems.contains(x) => (x, stringToJBool(s))
-    }
-  }
-
-  def writeJson(xmlStr: String,
-                elemName: String,
-                arrayNames: List[String],
-                numericNames: List[String],
-                boolNames: List[String]): Option[String] = {
-
-    Try(XML.loadString(xmlStr)) match {
-
-      case Success(xmlelems) =>
-        val json =
-          transform(xmlelems, elemName, arrayNames, numericNames, boolNames)
-        val txnJson: Seq[String] = json \ elemName match {
-          case jarray: JArray => jarray.children.map(t => compact(render(t)))
-          case jobj: JObject =>
-            List(compact(render(jobj)))
-          case jval: JValue =>
-            List(compact(render(jval)))
-          case _ =>
-            List()
-        }
-        txnJson.headOption
-
-      case Failure(_) =>
-        None
-
-    }
-  }
-
   def apply(pp: Boolean,
             elemName: String,
             arrayNames: List[String],
@@ -105,27 +36,8 @@ object Cli extends App {
       .takeWhile(_ != null)
       .foreach(xml => {
 
-        val result: Option[String] = Try(XML.loadString(xml)) match {
-
-          case Success(xmlelems) =>
-            val json =
-              transform(xmlelems, elemName, arrayNames, numericElems, boolElems)
-            val txnJson: Seq[String] = json \ elemName match {
-              case jarray: JArray =>
-                jarray.children.map(t => compact(render(t)))
-              case jobj: JObject =>
-                List(compact(render(jobj)))
-              case jval: JValue =>
-                List(compact(render(jval)))
-              case _ =>
-                List()
-            }
-            txnJson.headOption
-
-          case Failure(_) =>
-            None
-
-        }
+        val result: Option[String] =
+          Xml2Json(xml, elemName, arrayNames, numericElems, boolElems)
 
         val printMe = result.map(r => {
           if (pp && r.charAt(0) == '{') {
