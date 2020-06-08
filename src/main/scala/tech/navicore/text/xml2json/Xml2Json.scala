@@ -57,7 +57,7 @@ object Xml2Json {
       case Success(xmlelems) =>
         val json =
           transform(xmlelems, elemName, arrayNames, numericNames, boolNames)
-        val txnJson: Seq[String] = json \ elemName match {
+        val txnJson: Seq[String] = json \\ elemName match {
           case jarray: JArray => jarray.children.map(t => compact(render(t)))
           case jobj: JObject =>
             List(compact(render(jobj)))

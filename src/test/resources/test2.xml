@@ -1,0 +1,19 @@
+<location>
+    <locationNumber>1</locationNumber>
+    <name>Uqbar</name>
+    <important>F</important>
+    <nicknames>
+        <nickname>King</nickname>
+        <nickname>Kong</nickname>
+    </nicknames>
+    <addresses>
+        <addr>
+            <street>High Street</street>
+            <city>My City</city>
+        </addr>
+        <addr>
+            <street>Low Street</street>
+            <city>Your City</city>
+        </addr>
+    </addresses>
+</location>
