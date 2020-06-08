@@ -86,7 +86,7 @@ object Cli extends App {
           case _ =>
             List()
         }
-        Some(txnJson.head)
+        txnJson.headOption
 
       case Failure(_) =>
         None
@@ -120,7 +120,7 @@ object Cli extends App {
               case _ =>
                 List()
             }
-            Some(txnJson.head)
+            txnJson.headOption
 
           case Failure(_) =>
             None
