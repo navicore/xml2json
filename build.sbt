@@ -21,7 +21,7 @@ val main = Project(id = "Xml2Json", base = file("."))
 libraryDependencies ++=
   Seq(
 
-    "org.rogach" %% "scallop" % "3.4.0",
+    "org.rogach" %% "scallop" % "3.5.1",
     "org.json4s" %% "json4s-xml" % "3.6.12",
     "org.json4s" %% "json4s-native" % "3.6.12",
 
