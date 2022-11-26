@@ -25,7 +25,7 @@ libraryDependencies ++=
     "org.json4s" %% "json4s-xml" % "3.6.12",
     "org.json4s" %% "json4s-native" % "3.6.12",
 
-    "org.scalatest" %% "scalatest" % "3.1.2" % "test"
+    "org.scalatest" %% "scalatest" % "3.2.14" % "test"
 
   )
 
